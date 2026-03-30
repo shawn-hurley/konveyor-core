@@ -32,10 +32,7 @@ pub async fn serve_tcp<T: Provider>(provider: Arc<T>, port: u16) -> anyhow::Resu
 
 /// Start a gRPC server on a Unix domain socket for any `Provider` implementation.
 #[cfg(unix)]
-pub async fn serve_unix<T: Provider>(
-    provider: Arc<T>,
-    socket_path: &str,
-) -> anyhow::Result<()> {
+pub async fn serve_unix<T: Provider>(provider: Arc<T>, socket_path: &str) -> anyhow::Result<()> {
     use tokio::net::UnixListener;
     use tokio_stream::wrappers::UnixListenerStream;
 

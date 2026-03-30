@@ -89,11 +89,7 @@ pub trait Provider: Send + Sync + 'static {
     fn init(&self, location: &str) -> Result<(), ProviderError>;
 
     /// Evaluate a condition and return matching incidents.
-    fn evaluate(
-        &self,
-        capability: &str,
-        condition: &str,
-    ) -> Result<EvaluateResult, ProviderError>;
+    fn evaluate(&self, capability: &str, condition: &str) -> Result<EvaluateResult, ProviderError>;
 
     /// Stop the provider.
     fn stop(&self) {
@@ -196,8 +192,11 @@ impl<T: Provider> ProviderService for ProviderAdapter<T> {
 
         match self.inner.evaluate(&req.cap, &req.condition_info) {
             Ok(result) => {
-                let incident_contexts: Vec<proto::IncidentContext> =
-                    result.incidents.iter().map(proto::IncidentContext::from).collect();
+                let incident_contexts: Vec<proto::IncidentContext> = result
+                    .incidents
+                    .iter()
+                    .map(proto::IncidentContext::from)
+                    .collect();
 
                 Ok(Response::new(proto::EvaluateResponse {
                     error: String::new(),
@@ -217,10 +216,7 @@ impl<T: Provider> ProviderService for ProviderAdapter<T> {
         }
     }
 
-    async fn stop(
-        &self,
-        _request: Request<proto::ServiceRequest>,
-    ) -> Result<Response<()>, Status> {
+    async fn stop(&self, _request: Request<proto::ServiceRequest>) -> Result<Response<()>, Status> {
         tracing::info!("Provider stopping");
         self.inner.stop();
         Ok(Response::new(()))

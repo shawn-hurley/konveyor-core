@@ -21,10 +21,10 @@
 //!   the `Provider` trait, `ProviderAdapter`, and `serve_tcp`/`serve_unix`.
 //! - **`generate-proto`** -- Re-generates proto code from `provider.proto`.
 
+pub mod fix;
 pub mod incident;
 pub mod report;
 pub mod rule;
-pub mod fix;
 
 #[cfg(feature = "grpc")]
 pub mod grpc;
