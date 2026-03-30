@@ -73,7 +73,7 @@ jobs:
         uses: https://github.com/dtolnay/rust-toolchain@stable
 
       - name: Publish
-        run: cargo publish --token "$CARGO_REGISTRY_TOKEN"
+        run: cargo publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
@@ -108,14 +108,11 @@ jobs:
         run: |
           sed -i "s/^version *= *\"${{ steps.next.outputs.current }}\"/version = \"${{ steps.next.outputs.next }}\"/" Cargo.toml
 
-      - name: Update Cargo.lock
-        run: cargo generate-lockfile
-
       - name: Create branch and commit
         run: |
           BRANCH="chore/bump-v${{ steps.next.outputs.next }}"
           git checkout -b "$BRANCH"
-          git add Cargo.toml Cargo.lock
+          git add Cargo.toml
           git commit -m "chore: bump version to ${{ steps.next.outputs.next }}"
           git push origin "$BRANCH"
 
