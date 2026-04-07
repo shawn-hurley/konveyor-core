@@ -172,6 +172,13 @@ pub struct FrontendReferencedFields {
         default
     )]
     pub parent_from: Option<String>,
+    /// Positive child filter: only match the component (via `pattern`) if it
+    /// has at least one direct JSX child whose name matches this regex. The
+    /// incident is emitted on the parent component. Used for migration rules
+    /// to detect old-style children still present (e.g., `child: ^ModalBox$`
+    /// fires on `<Modal>` only when it still contains old internal components).
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub child: Option<String>,
     /// Negative child filter: match the parent component (via `pattern`) and
     /// emit incidents for each direct JSX child whose name does NOT match this
     /// pattern. Used for "exclusive wrapper" rules (e.g., "all children of
