@@ -271,6 +271,12 @@ pub struct FixStrategyEntry {
     /// Prop value changes: prop_name → list of old→new value mappings.
     #[serde(skip_serializing_if = "BTreeMap::is_empty", default)]
     pub prop_value_changes: BTreeMap<String, Vec<MappingEntry>>,
+    /// Prop type changes: prop_name → list of old→new type signature mappings.
+    /// Captures cases where a prop's TypeScript type changed between versions
+    /// (e.g., a callback signature gained an event parameter). `from` may be
+    /// `None` when the old type is unknown (inherited prop that became explicit).
+    #[serde(skip_serializing_if = "BTreeMap::is_empty", default)]
+    pub prop_type_changes: BTreeMap<String, Vec<MappingEntry>>,
     /// New imports needed after restructuring (child components to add).
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub new_imports: Vec<String>,
